@@ -30,7 +30,7 @@ public class StatsClient extends BaseClient {
         return post("/hit", hit);
     }
 
-    public ResponseEntity<Object> getStats(String start, String end, Set<String> uris, Boolean unique) {
+    public ResponseEntity<Object> getStats(String start, String end, Set<String> uris, boolean unique) {
         Map<String, Object> parameters = Map.of(
                 "start", start,
                 "end", end,

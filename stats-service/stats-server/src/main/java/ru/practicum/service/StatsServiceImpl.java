@@ -29,13 +29,13 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, Set<String> uris, Boolean unique) {
+    public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, Set<String> uris, boolean unique) {
         if (unique && uris != null) return repository.findUniqueWithUrisStats(start, end, uris);
 
         if (unique) return repository.findUniqueStats(start, end);
 
-        if (uris == null) return repository.findStats(start, end);
+        if (uris != null) return repository.findWithUrisStats(start, end, uris);
 
-        return repository.findWithUrisStats(start, end, uris);
+        return repository.findStats(start, end);
     }
 }

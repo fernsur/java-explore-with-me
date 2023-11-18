@@ -43,7 +43,7 @@ public class StatsController {
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
             @RequestParam Set<String> uris,
-            @RequestParam(defaultValue = "false") Boolean unique) {
+            @RequestParam(required = false, defaultValue = "false") boolean unique) {
         if (start.isAfter(end)) {
             throw new DataValidationException("Дата старта не может быть после даты конца");
         }
