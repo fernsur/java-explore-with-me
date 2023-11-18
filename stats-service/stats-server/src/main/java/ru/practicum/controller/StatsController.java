@@ -40,7 +40,7 @@ public class StatsController {
     public ResponseEntity<List<ViewStats>> getStats(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
-            @RequestParam Set<String> uris,
+            @RequestParam(required = false) Set<String> uris,
             @RequestParam(required = false, defaultValue = "false") boolean unique) {
         log.info("Получен GET-запрос к эндпоинту /stats получение статистики.");
         return new ResponseEntity<>(statsService.getStats(start, end, uris, unique), HttpStatus.OK);
