@@ -30,10 +30,12 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, Set<String> uris, Boolean unique) {
-        if (unique) {
-            return repository.findUniqueViewStats(start, end, uris);
-        } else {
-            return repository.findViewStats(start, end, uris);
-        }
+        if (unique && uris != null) return repository.findUniqueWithUrisStats(start, end, uris);
+
+        if (unique) return repository.findUniqueStats(start, end);
+
+        if (uris == null) return repository.findStats(start, end);
+
+        return repository.findWithUrisStats(start, end, uris);
     }
 }
