@@ -19,7 +19,6 @@ import ru.practicum.client.StatsClient;
 import ru.practicum.exception.DataValidationException;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Slf4j
