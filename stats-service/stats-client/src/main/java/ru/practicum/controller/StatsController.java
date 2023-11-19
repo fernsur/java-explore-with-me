@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import lombok.extern.slf4j.Slf4j;
 
 
-import ru.practicum.dto.EndpointHitDto;
+import ru.practicum.dto.EndpointHit;
 import ru.practicum.client.StatsClient;
 import ru.practicum.exception.DataValidationException;
 
@@ -33,7 +33,7 @@ public class StatsController {
     }
 
     @PostMapping("/hit")
-    public ResponseEntity<Object> createHit(@RequestBody EndpointHitDto dto) {
+    public ResponseEntity<Object> createHit(@RequestBody EndpointHit dto) {
         log.info("Получен POST-запрос к эндпоинту /hit на сохранение информации о запросе.");
         return statsClient.createHit(dto);
     }

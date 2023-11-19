@@ -8,7 +8,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
-import ru.practicum.dto.EndpointHitDto;
+import ru.practicum.dto.EndpointHit;
 
 import java.util.Map;
 import java.util.Set;
@@ -26,7 +26,7 @@ public class StatsClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> createHit(EndpointHitDto hit) {
+    public ResponseEntity<Object> createHit(EndpointHit hit) {
         return post("/hit", hit);
     }
 

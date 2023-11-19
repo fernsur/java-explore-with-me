@@ -17,6 +17,7 @@
     <name>stats-service</name>
 
     <modules>
+        <module>stats-dto</module>
         <module>stats-client</module>
         <module>stats-server</module>
     </modules>
@@ -61,14 +62,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
