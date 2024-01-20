@@ -35,7 +35,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiError DataIntegrityViolationException(final DataIntegrityViolationException e) {
+    public ApiError handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
         return new ApiError(
                 HttpStatus.CONFLICT.toString(),
                 "Integrity constraint has been violated.",
