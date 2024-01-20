@@ -13,14 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import ru.practicum.dto.EndpointHit;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.ParamEvents;
 import ru.practicum.enums.EventSort;
 import ru.practicum.exception.ValidationException;
 import ru.practicum.service.event.EventService;
-import ru.practicum.service.client.StatsClient;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
