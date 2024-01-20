@@ -3,7 +3,8 @@ package ru.practicum.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.enums.Status;
+
+import ru.practicum.enums.RequestStatus;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -30,14 +31,14 @@ public class Request {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requester_id")
-    private Long requester;
+    private User requester;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
-    private Long event;
+    private Event event;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private RequestStatus status;
 
     private LocalDateTime created;
 }

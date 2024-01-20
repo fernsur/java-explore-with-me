@@ -1,9 +1,10 @@
-package ru.practicum.dto.event.request;
+package ru.practicum.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.enums.Status;
+
+import ru.practicum.enums.RequestStatus;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +18,7 @@ public class ParticipationRequestDto {
 
     private Long event;
 
-    private Status status;
+    private RequestStatus status;
 
     private LocalDateTime created;
 }

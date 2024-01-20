@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import ru.practicum.dto.event.request.ParticipationRequestDto;
+import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.service.request.RequestService;
 
-
 import javax.validation.constraints.Positive;
+
 import java.util.List;
 
 @Slf4j

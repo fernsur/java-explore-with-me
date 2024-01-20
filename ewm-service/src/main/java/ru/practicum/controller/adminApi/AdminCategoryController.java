@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import ru.practicum.service.category.CategoryService;
-import ru.practicum.dto.CategoryDto;
+import ru.practicum.dto.category.CategoryDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;

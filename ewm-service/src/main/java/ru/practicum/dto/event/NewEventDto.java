@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import ru.practicum.model.Location;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Size;
 
@@ -16,18 +19,23 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateEventRequest {
+public class NewEventDto {
+    @NotBlank(message = "Название события не может быть пустым")
     @Size(min = 3, max = 120)
     private String title;
 
+    @NotBlank(message = "Аннотация события не может быть пустой")
     @Size(min = 20, max = 2000)
     private String annotation;
 
+    @NotBlank(message = "Описание события не может быть пустым")
     @Size(min = 20, max = 7000)
     private String description;
 
+    @Positive
     private Long category;
 
+    @NotNull(message = "Локация события не может быть пустой")
     private Location location;
 
     @Future
@@ -41,5 +49,5 @@ public class UpdateEventRequest {
 
     private Boolean requestModeration;
 
-    private String stateAction;
+    private Long views;
 }
