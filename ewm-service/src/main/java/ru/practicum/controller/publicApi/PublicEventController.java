@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ru.practicum.client.StatsClient;
-import ru.practicum.controller.StatsController;
 import ru.practicum.dto.EndpointHit;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
@@ -48,7 +47,7 @@ public class PublicEventController {
     private StatsClient stats;
 
     @Autowired
-    public PublicEventController(EventService service, StatsController stats) {
+    public PublicEventController(EventService service) {
         this.service = service;
     }
 
