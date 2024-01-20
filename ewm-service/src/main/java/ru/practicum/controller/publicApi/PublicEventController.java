@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import ru.practicum.client.StatsClient;
+import ru.practicum.stats.StatsClient;
 import ru.practicum.dto.EndpointHit;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
@@ -24,7 +24,6 @@ import ru.practicum.enums.EventSort;
 import ru.practicum.exception.ValidationException;
 import ru.practicum.service.event.EventService;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -39,22 +38,14 @@ import java.util.List;
 public class PublicEventController {
     public static final LocalDateTime MAX_DATE = LocalDateTime.parse("2025-12-12T23:59:59");
 
-    @Value("${stats-server.url}")
-    private String url;
-
     private final EventService service;
 
-    private StatsClient stats;
+    private final StatsClient stats;
 
     @Autowired
-    public PublicEventController(EventService service) {
+    public PublicEventController(EventService service, StatsClient stats) {
         this.service = service;
-    }
-
-    @PostConstruct
-    private void init() {
-        RestTemplateBuilder builder = new RestTemplateBuilder();
-        stats = new StatsClient(url, builder);
+        this.stats = stats;
     }
 
     @GetMapping()
