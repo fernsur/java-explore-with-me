@@ -2,6 +2,8 @@ package ru.practicum.controller.publicApi;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import ru.practicum.client.StatsClient;
 import ru.practicum.controller.StatsController;
 import ru.practicum.dto.EndpointHit;
 import ru.practicum.dto.event.EventFullDto;
@@ -22,6 +25,7 @@ import ru.practicum.enums.EventSort;
 import ru.practicum.exception.ValidationException;
 import ru.practicum.service.event.EventService;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -36,14 +40,22 @@ import java.util.List;
 public class PublicEventController {
     public static final LocalDateTime MAX_DATE = LocalDateTime.parse("2025-12-12T23:59:59");
 
+    @Value("${stats-server.url}")
+    private String url;
+
     private final EventService service;
 
-    private final StatsController stats;
+    private StatsClient stats;
 
     @Autowired
     public PublicEventController(EventService service, StatsController stats) {
         this.service = service;
-        this.stats = stats;
+    }
+
+    @PostConstruct
+    private void init() {
+        RestTemplateBuilder builder = new RestTemplateBuilder();
+        stats = new StatsClient(url, builder);
     }
 
     @GetMapping()
