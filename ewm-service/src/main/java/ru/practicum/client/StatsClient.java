@@ -1,4 +1,4 @@
-package ru.practicum.service.client;
+package ru.practicum.client;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +11,7 @@ import ru.practicum.dto.EndpointHit;
 @Service
 @RequiredArgsConstructor
 public class StatsClient {
-    @Value("${stats-server.url}")
+    @Value("${stats-client.url}")
     private String statUrl;
     private final RestTemplate restTemplate = new RestTemplate();
 

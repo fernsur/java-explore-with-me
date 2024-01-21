@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import ru.practicum.client.StatsClient;
+import ru.practicum.dto.EndpointHit;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.ParamEvents;
@@ -36,11 +38,12 @@ public class PublicEventController {
 
     private final EventService service;
 
-//    private final StatsClient stats;
+    private final StatsClient stats;
 
     @Autowired
-    public PublicEventController(EventService service) {
+    public PublicEventController(EventService service, StatsClient stats) {
         this.service = service;
+        this.stats = stats;
     }
 
     @GetMapping()
@@ -75,12 +78,12 @@ public class PublicEventController {
                 .sort(sort)
                 .build();
 
-//        stats.createHit(EndpointHit.builder()
-//                .app("ewm")
-//                .uri(request.getRequestURI())
-//                .ip(request.getRemoteAddr())
-//                .timestamp(LocalDateTime.now())
-//                .build());
+        stats.createHit(EndpointHit.builder()
+                .app("ewm")
+                .uri(request.getRequestURI())
+                .ip(request.getRemoteAddr())
+                .timestamp(LocalDateTime.now())
+                .build());
 
         return new ResponseEntity<>(service.searchEvents(paramEvents, from, size), HttpStatus.OK);
     }
@@ -90,12 +93,12 @@ public class PublicEventController {
                                                         HttpServletRequest request) {
         log.info("Получен GET-запрос к эндпоинту /events/{eventId} на получение информации о событии.");
 
-//        stats.createHit(EndpointHit.builder()
-//                .app("ewm")
-//                .uri(request.getRequestURI())
-//                .ip(request.getRemoteAddr())
-//                .timestamp(LocalDateTime.now())
-//                .build());
+        stats.createHit(EndpointHit.builder()
+                .app("ewm")
+                .uri(request.getRequestURI())
+                .ip(request.getRemoteAddr())
+                .timestamp(LocalDateTime.now())
+                .build());
 
         return new ResponseEntity<>(service.eventByIdPublic(eventId, request), HttpStatus.OK);
     }

@@ -112,15 +112,7 @@ public class EventServiceImpl implements EventService {
                     "или события в состоянии ожидания модерации.");
         }
 
-        if (dto.getTitle() != null) event.setTitle(dto.getTitle());
-        if (dto.getAnnotation() != null) event.setAnnotation(dto.getAnnotation());
-        if (dto.getDescription() != null) event.setDescription(dto.getDescription());
-        if (dto.getCategory() != null) event.setCategory(findCategoryById(dto.getCategory()));
-        if (dto.getLocation() != null) event.setLocation(findLocation(dto.getLocation()));
-        if (dto.getEventDate() != null) event.setEventDate(dto.getEventDate());
-        if (dto.getPaid() != null) event.setPaid(dto.getPaid());
-        if (dto.getParticipantLimit() != null) event.setParticipantLimit(dto.getParticipantLimit());
-        if (dto.getRequestModeration() != null) event.setRequestModeration(dto.getRequestModeration());
+        update(event, dto);
         if (dto.getStateAction() != null) event.setState(dto.getStateAction().equals("SEND_TO_REVIEW")
                 ? EventState.PENDING : EventState.CANCELED);
 
@@ -248,16 +240,7 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        if (dto.getTitle() != null) event.setTitle(dto.getTitle());
-        if (dto.getAnnotation() != null) event.setAnnotation(dto.getAnnotation());
-        if (dto.getDescription() != null) event.setDescription(dto.getDescription());
-        if (dto.getCategory() != null) event.setCategory(findCategoryById(dto.getCategory()));
-        if (dto.getLocation() != null) event.setLocation(findLocation(dto.getLocation()));
-        if (dto.getEventDate() != null) event.setEventDate(dto.getEventDate());
-        if (dto.getPaid() != null) event.setPaid(dto.getPaid());
-        if (dto.getParticipantLimit() != null) event.setParticipantLimit(dto.getParticipantLimit());
-        if (dto.getRequestModeration() != null) event.setRequestModeration(dto.getRequestModeration());
-
+        update(event, dto);
         if (dto.getStateAction() != null) {
             switch (EventStateAction.valueOf(dto.getStateAction())) {
                 case PUBLISH_EVENT:
@@ -272,6 +255,20 @@ public class EventServiceImpl implements EventService {
 
         event = eventRepository.save(event);
         return EventMapper.toFullDto(event);
+    }
+
+    private Event update(Event event, UpdateEventRequest dto) {
+        if (dto.getTitle() != null) event.setTitle(dto.getTitle());
+        if (dto.getAnnotation() != null) event.setAnnotation(dto.getAnnotation());
+        if (dto.getDescription() != null) event.setDescription(dto.getDescription());
+        if (dto.getCategory() != null) event.setCategory(findCategoryById(dto.getCategory()));
+        if (dto.getLocation() != null) event.setLocation(findLocation(dto.getLocation()));
+        if (dto.getEventDate() != null) event.setEventDate(dto.getEventDate());
+        if (dto.getPaid() != null) event.setPaid(dto.getPaid());
+        if (dto.getParticipantLimit() != null) event.setParticipantLimit(dto.getParticipantLimit());
+        if (dto.getRequestModeration() != null) event.setRequestModeration(dto.getRequestModeration());
+
+        return event;
     }
 
     private Event findEventById(long eventId) {
