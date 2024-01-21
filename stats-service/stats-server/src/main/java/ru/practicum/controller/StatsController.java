@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import ru.practicum.dto.EndpointHit;
 import ru.practicum.dto.ViewStats;
+import ru.practicum.exception.DataValidationException;
 import ru.practicum.service.StatsService;
 
 import java.time.LocalDateTime;
@@ -42,6 +43,9 @@ public class StatsController {
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
             @RequestParam(required = false) Set<String> uris,
             @RequestParam(required = false, defaultValue = "false") boolean unique) {
+        if (start.isAfter(end)) {
+            throw new DataValidationException("Дата старта не может быть после даты конца");
+        }
         log.info("Получен GET-запрос к эндпоинту /stats получение статистики.");
         return new ResponseEntity<>(statsService.getStats(start, end, uris, unique), HttpStatus.OK);
     }
