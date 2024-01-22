@@ -13,7 +13,6 @@ import ru.practicum.dto.EndpointHit;
 import java.util.Map;
 import java.util.Set;
 
-@Service
 public class StatsClient extends BaseClient {
 
     @Autowired

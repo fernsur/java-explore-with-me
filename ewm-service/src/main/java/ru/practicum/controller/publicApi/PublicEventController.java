@@ -2,6 +2,8 @@ package ru.practicum.controller.publicApi;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,6 +26,7 @@ import ru.practicum.enums.EventSort;
 import ru.practicum.exception.ValidationException;
 import ru.practicum.service.event.EventService;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -40,12 +43,19 @@ public class PublicEventController {
 
     private final EventService service;
 
-    private final StatsClient stats;
+    @Value("${STATS_SERVER_URL:http://localhost:9090}")
+    private String statUrl;
+
+    private StatsClient stats;
 
     @Autowired
-    public PublicEventController(EventService service, StatsClient stats) {
+    public PublicEventController(EventService service) {
         this.service = service;
-        this.stats = stats;
+    }
+
+    @PostConstruct
+    private void init() {
+        stats = new StatsClient(statUrl, new RestTemplateBuilder());
     }
 
     @GetMapping()
