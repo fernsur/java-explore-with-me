@@ -33,15 +33,15 @@ public class PublicCategoryController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<CategoryDto>> allCategories(@PositiveOrZero @RequestParam(defaultValue = "0") int from,
-                                                           @Positive @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<List<CategoryDto>> getAllCategories(@PositiveOrZero @RequestParam(defaultValue = "0") int from,
+                                                              @Positive @RequestParam(defaultValue = "10") int size) {
         log.info("Получен GET-запрос к эндпоинту /categories на получение всех категорий.");
-        return new ResponseEntity<>(service.allCategories(from, size), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllCategories(from, size), HttpStatus.OK);
     }
 
     @GetMapping("/{catId}")
-    public ResponseEntity<CategoryDto> categoryById(@Positive @PathVariable long catId) {
+    public ResponseEntity<CategoryDto> getCategoryById(@Positive @PathVariable long catId) {
         log.info("Получен GET-запрос к эндпоинту /categories/{catId} на получение категории по id.");
-        return new ResponseEntity<>(service.categoryById(catId), HttpStatus.OK);
+        return new ResponseEntity<>(service.getCategoryById(catId), HttpStatus.OK);
     }
 }

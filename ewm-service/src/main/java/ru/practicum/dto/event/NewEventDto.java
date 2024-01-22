@@ -36,7 +36,7 @@ public class NewEventDto {
     private Long category;
 
     @NotNull(message = "Локация события не может быть пустой")
-    private Location location;
+    private LocationDto location;
 
     @Future
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

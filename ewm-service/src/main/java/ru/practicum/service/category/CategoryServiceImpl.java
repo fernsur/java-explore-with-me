@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import ru.practicum.dto.category.CategoryDto;
+import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.exception.AlreadyExistsException;
 import ru.practicum.exception.ConflictDataException;
 import ru.practicum.exception.NotFoundException;
@@ -34,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto createCategory(CategoryDto dto) {
+    public CategoryDto createCategory(NewCategoryDto dto) {
         try {
             Category category = CategoryMapper.toEntity(dto);
             return CategoryMapper.toDto(categoryRepository.save(category));
@@ -46,11 +47,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto updateCategory(CategoryDto dto, long catId) {
+    public CategoryDto updateCategory(CategoryDto dto) {
         Category category;
 
         try {
-            category = CategoryMapper.toEntity(categoryById(catId));
+            category = CategoryMapper.toEntity(getCategoryById(dto.getId()));
             if (dto.getName() != null) {
                 String name = dto.getName();
                 category.setName(name);
@@ -67,15 +68,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(long catId) {
-        categoryById(catId);
-        if (eventRepository.findAllByCategoryId(catId).size() > 0) {
+        Category category = findCategoryById(catId);
+        if (eventRepository.existsByCategory(category)) {
             throw new ConflictDataException("Нельзя удалить категорию. Есть связанные события.");
         }
         categoryRepository.deleteById(catId);
     }
 
     @Override
-    public List<CategoryDto> allCategories(int from, int size) {
+    public List<CategoryDto> getAllCategories(int from, int size) {
         Page<Category> categories;
         Sort sort = Sort.by(Sort.Direction.ASC, "id");
         PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size, sort);
@@ -87,9 +88,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto categoryById(long catId) {
-        Category category = categoryRepository.findById(catId)
-                .orElseThrow(() -> new NotFoundException("Невозможно найти. Такой категории нет."));
+    public CategoryDto getCategoryById(long catId) {
+        Category category = findCategoryById(catId);
         return CategoryMapper.toDto(category);
+    }
+
+    public Category findCategoryById(long catId) {
+        return categoryRepository.findById(catId)
+                .orElseThrow(() -> new NotFoundException("Невозможно найти. Такой категории нет."));
     }
 }

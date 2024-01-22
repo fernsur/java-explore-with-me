@@ -43,11 +43,11 @@ public class PrivateEventController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<EventShortDto>> allEvents(@Positive @PathVariable long userId,
-                                                         @PositiveOrZero @RequestParam(defaultValue = "0") int from,
-                                                         @Positive @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<List<EventShortDto>> getAllEvents(@Positive @PathVariable long userId,
+                                                            @PositiveOrZero @RequestParam(defaultValue = "0") int from,
+                                                            @Positive @RequestParam(defaultValue = "10") int size) {
         log.info("Получен GET-запрос к эндпоинту /users/{userId}/events на получение событий пользователя.");
-        return new ResponseEntity<>(service.allEvents(userId, from, size), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllEvents(userId, from, size), HttpStatus.OK);
     }
 
     @PostMapping()
@@ -58,10 +58,10 @@ public class PrivateEventController {
     }
 
     @GetMapping("/{eventId}")
-    public ResponseEntity<EventFullDto> eventByIdPrivate(@Positive @PathVariable long userId,
-                                                         @Positive @PathVariable long eventId) {
+    public ResponseEntity<EventFullDto> getEventByIdPrivate(@Positive @PathVariable long userId,
+                                                            @Positive @PathVariable long eventId) {
         log.info("Получен GET-запрос к эндпоинту /users/{userId}/events/{eventId} на получение информации о событии.");
-        return new ResponseEntity<>(service.eventByIdPrivate(userId, eventId), HttpStatus.OK);
+        return new ResponseEntity<>(service.getEventByIdPrivate(userId, eventId), HttpStatus.OK);
     }
 
     @PatchMapping("/{eventId}")
@@ -73,11 +73,11 @@ public class PrivateEventController {
     }
 
     @GetMapping("/{eventId}/requests")
-    public ResponseEntity<List<ParticipationRequestDto>> allRequests(@Positive @PathVariable long userId,
-                                                                     @Positive @PathVariable long eventId) {
+    public ResponseEntity<List<ParticipationRequestDto>> getAllUserRequests(@Positive @PathVariable long userId,
+                                                                            @Positive @PathVariable long eventId) {
         log.info("Получен GET-запрос к эндпоинту /users/{userId}/events/{eventId}/requests " +
                 "на получение всех запросов на участие в событии.");
-        return new ResponseEntity<>(service.allRequests(userId, eventId), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllUserRequests(userId, eventId), HttpStatus.OK);
     }
 
     @PatchMapping("/{eventId}/requests")

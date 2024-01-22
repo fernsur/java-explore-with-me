@@ -2,6 +2,8 @@ package ru.practicum.controller.publicApi;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +70,9 @@ public class PublicEventController {
         if (rangeStart == null) rangeStart = LocalDateTime.now();
         if (rangeEnd == null) rangeEnd = MAX_DATE;
 
+        Sort sorted = Sort.by(Sort.Direction.ASC, "id");
+        PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size, sorted);
+
         ParamEvents paramEvents = ParamEvents.builder()
                 .text(text)
                 .categories(categories)
@@ -76,6 +81,7 @@ public class PublicEventController {
                 .rangeEnd(rangeEnd)
                 .onlyAvailable(onlyAvailable)
                 .sort(sort)
+                .page(page)
                 .build();
 
         stats.createHit(EndpointHit.builder()
@@ -85,14 +91,13 @@ public class PublicEventController {
                 .timestamp(LocalDateTime.now())
                 .build());
 
-        return new ResponseEntity<>(service.searchEvents(paramEvents, from, size), HttpStatus.OK);
+        return new ResponseEntity<>(service.searchEvents(paramEvents), HttpStatus.OK);
     }
 
     @GetMapping("/{eventId}")
     public ResponseEntity<EventFullDto> eventByIdPublic(@Positive @PathVariable long eventId,
                                                         HttpServletRequest request) {
         log.info("Получен GET-запрос к эндпоинту /events/{eventId} на получение информации о событии.");
-
         stats.createHit(EndpointHit.builder()
                 .app("ewm")
                 .uri(request.getRequestURI())

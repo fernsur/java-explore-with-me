@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> allUsers(List<Long> ids, int from, int size) {
+    public List<UserDto> getAllUsers(List<Long> ids, int from, int size) {
         Page<User> users;
         Sort sort = Sort.by(Sort.Direction.ASC, "id");
         PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size, sort);

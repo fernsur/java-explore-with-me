@@ -70,4 +70,11 @@ public class EventMapper {
         return new LocationDto(location.getLat(),
                                location.getLon());
     }
+
+    public static Location toLocation(LocationDto location) {
+        return Location.builder()
+                .lat(location.getLat())
+                .lon(location.getLon())
+                .build();
+    }
 }

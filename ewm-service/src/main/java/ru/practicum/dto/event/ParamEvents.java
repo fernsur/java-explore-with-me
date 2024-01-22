@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import org.springframework.data.domain.PageRequest;
 import ru.practicum.enums.EventSort;
 import ru.practicum.enums.EventState;
 
@@ -33,4 +34,6 @@ public class ParamEvents {
     private Boolean onlyAvailable;
 
     private EventSort sort;
+
+    private PageRequest page;
 }

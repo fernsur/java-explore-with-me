@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import ru.practicum.enums.EventState;
+import ru.practicum.model.Category;
 import ru.practicum.model.Event;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ import java.util.List;
 public interface EventRepository extends JpaRepository<Event, Long> {
     Page<Event> findAllByInitiatorId(long userId, Pageable pageable);
 
-    List<Event> findAllByCategoryId(long catId);
+    boolean existsByCategory(Category category);
 
     @Query("SELECT e FROM Event e " +
             "WHERE (:text IS NULL OR (LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +

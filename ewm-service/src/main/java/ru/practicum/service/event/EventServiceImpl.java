@@ -66,7 +66,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> allEvents(long userId, int from, int size) {
+    public List<EventShortDto> getAllEvents(long userId, int from, int size) {
         Sort sort = Sort.by(Sort.Direction.ASC, "id");
         PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size, sort);
 
@@ -84,7 +84,7 @@ public class EventServiceImpl implements EventService {
 
         User user = findUserById(userId);
         Category category = findCategoryById(dto.getCategory());
-        Location location = findLocation(dto.getLocation());
+        Location location = findLocation(EventMapper.toLocation(dto.getLocation()));
 
         Event event = EventMapper.toEntity(dto, user, category, location);
 
@@ -92,7 +92,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto eventByIdPrivate(long userId, long eventId) {
+    public EventFullDto getEventByIdPrivate(long userId, long eventId) {
         findUserById(userId);
         return EventMapper.toFullDto(findEventById(eventId));
     }
@@ -121,7 +121,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<ParticipationRequestDto> allRequests(long userId, long eventId) {
+    public List<ParticipationRequestDto> getAllUserRequests(long userId, long eventId) {
         findUserById(userId);
         findEventById(eventId);
         return requestRepository.findAllByEventId(eventId).stream()
@@ -166,17 +166,15 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> searchEvents(ParamEvents paramEvents, int from, int size) {
+    public List<EventShortDto> searchEvents(ParamEvents paramEvents) {
         List<EventShortDto> events;
-        PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size);
-
         events = eventRepository.findAllByUser(paramEvents.getText(),
                                                paramEvents.getCategories(),
                                                paramEvents.getPaid(),
                                                paramEvents.getOnlyAvailable(),
                                                paramEvents.getRangeStart(),
                                                paramEvents.getRangeEnd(),
-                                               page)
+                                               paramEvents.getPage())
                 .getContent().stream()
                 .map(EventMapper::toShortDto)
                 .collect(Collectors.toList());
@@ -207,17 +205,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> getEventsAdmin(ParamEvents paramEvents, int from, int size) {
+    public List<EventFullDto> getEventsAdmin(ParamEvents paramEvents) {
         Page<Event> events;
-        Sort sort = Sort.by(Sort.Direction.ASC, "id");
-        PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size, sort);
-
         events = eventRepository.findAllByAdmin(paramEvents.getUsers(),
                                                 paramEvents.getStates(),
                                                 paramEvents.getCategories(),
                                                 paramEvents.getRangeStart(),
                                                 paramEvents.getRangeEnd(),
-                                                page);
+                                                paramEvents.getPage());
 
         return events.getContent().stream()
                 .map(EventMapper::toFullDto)
@@ -281,7 +276,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Невозможно найти. Такого пользователя нет."));
     }
 
-    public Category findCategoryById(long catId) {
+    private Category findCategoryById(long catId) {
         return categoryRepository.findById(catId)
                 .orElseThrow(() -> new NotFoundException("Невозможно найти. Такой категории нет."));
     }

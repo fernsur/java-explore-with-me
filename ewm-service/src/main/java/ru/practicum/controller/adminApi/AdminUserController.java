@@ -37,11 +37,11 @@ public class AdminUserController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<UserDto>> allUsers(@RequestParam(required = false) List<Long> ids,
-                                                  @PositiveOrZero @RequestParam(defaultValue = "0") int from,
-                                                  @Positive @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<List<UserDto>> getAllUsers(@RequestParam(required = false) List<Long> ids,
+                                                     @PositiveOrZero @RequestParam(defaultValue = "0") int from,
+                                                     @Positive @RequestParam(defaultValue = "10") int size) {
         log.info("Получен GET-запрос к эндпоинту /admin/users на получение списка пользователей.");
-        return new ResponseEntity<>(service.allUsers(ids, from, size), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllUsers(ids, from, size), HttpStatus.OK);
     }
 
     @PostMapping()

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.service.category.CategoryService;
 import ru.practicum.dto.category.CategoryDto;
 
@@ -33,7 +34,7 @@ public class AdminCategoryController {
     }
 
     @PostMapping()
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody @Valid CategoryDto dto) {
+    public ResponseEntity<CategoryDto> createCategory(@RequestBody @Valid NewCategoryDto dto) {
         log.info("Получен POST-запрос к эндпоинту /admin/categories на добавление категории.");
         return new ResponseEntity<>(service.createCategory(dto), HttpStatus.CREATED);
     }
@@ -49,6 +50,7 @@ public class AdminCategoryController {
     public ResponseEntity<CategoryDto> updateCategory(@RequestBody @Valid CategoryDto dto,
                                                       @Positive @PathVariable long catId) {
         log.info("Получен PATCH-запрос к эндпоинту /admin/categories/{catId} на обновление категории.");
-        return new ResponseEntity<>(service.updateCategory(dto, catId), HttpStatus.OK);
+        dto.setId(catId);
+        return new ResponseEntity<>(service.updateCategory(dto), HttpStatus.OK);
     }
 }

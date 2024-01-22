@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import ru.practicum.dto.event.EventShortDto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
@@ -16,6 +18,8 @@ import java.util.List;
 public class CompilationDto {
     private Long id;
 
+    @NotBlank(message = "Название подборки не может быть пустым")
+    @Size(max = 50)
     private String title;
 
     private Boolean pinned;

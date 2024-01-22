@@ -34,10 +34,10 @@ public class PrivateRequestController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ParticipationRequestDto>> allRequests(@Positive @PathVariable long userId) {
+    public ResponseEntity<List<ParticipationRequestDto>> getAllRequests(@Positive @PathVariable long userId) {
         log.info("Получен GET-запрос к эндпоинту /users/{userId}/requests " +
                 "на получение заявок пользователя на участие в событиях.");
-        return new ResponseEntity<>(service.allRequests(userId), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllRequests(userId), HttpStatus.OK);
     }
 
     @PostMapping()

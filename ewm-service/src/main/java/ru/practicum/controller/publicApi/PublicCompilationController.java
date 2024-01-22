@@ -33,17 +33,17 @@ public class PublicCompilationController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<CompilationDto>> allCompilations(
+    public ResponseEntity<List<CompilationDto>> getAllCompilations(
                         @RequestParam(required = false) Boolean pinned,
                         @PositiveOrZero @RequestParam(defaultValue = "0") int from,
                         @Positive @RequestParam(defaultValue = "10") int size) {
         log.info("Получен GET-запрос к эндпоинту /compilations на получение списка подборок.");
-        return new ResponseEntity<>(service.allCompilations(pinned, from, size), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllCompilations(pinned, from, size), HttpStatus.OK);
     }
 
     @GetMapping("/{compId}")
-    public ResponseEntity<CompilationDto> compilationById(@Positive @PathVariable long compId) {
+    public ResponseEntity<CompilationDto> getCompilationById(@Positive @PathVariable long compId) {
         log.info("Получен GET-запрос к эндпоинту /compilations/{compId} на получение подборки по id.");
-        return new ResponseEntity<>(service.compilationById(compId), HttpStatus.OK);
+        return new ResponseEntity<>(service.getCompilationById(compId), HttpStatus.OK);
     }
 }

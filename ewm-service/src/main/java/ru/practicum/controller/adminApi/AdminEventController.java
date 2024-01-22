@@ -2,6 +2,7 @@ package ru.practicum.controller.adminApi;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +57,7 @@ public class AdminEventController {
 
         if (rangeStart == null) rangeStart = LocalDateTime.now();
         if (rangeEnd == null) rangeEnd = MAX_DATE;
+        PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size);
 
         ParamEvents paramEvents = ParamEvents.builder()
                 .users(users)
@@ -63,9 +65,10 @@ public class AdminEventController {
                 .categories(categories)
                 .rangeStart(rangeStart)
                 .rangeEnd(rangeEnd)
+                .page(page)
                 .build();
 
-        return new ResponseEntity<>(service.getEventsAdmin(paramEvents, from, size), HttpStatus.OK);
+        return new ResponseEntity<>(service.getEventsAdmin(paramEvents), HttpStatus.OK);
     }
 
     @PatchMapping("/{eventId}")

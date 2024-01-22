@@ -45,13 +45,13 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public void deleteCompilation(long compId) {
-        compilationById(compId);
+        getCompilationById(compId);
         compilationRepository.deleteById(compId);
     }
 
     @Override
     public CompilationDto updateCompilation(UpdateCompilationRequest dto, long compId) {
-        Compilation compilation = CompilationMapper.toEntity(compilationById(compId), null);
+        Compilation compilation = CompilationMapper.toEntity(getCompilationById(compId), null);
 
         if (dto.getTitle() != null && !dto.getTitle().isBlank()) {
             compilation.setTitle(dto.getTitle());
@@ -70,7 +70,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public List<CompilationDto> allCompilations(Boolean pinned, int from, int size) {
+    public List<CompilationDto> getAllCompilations(Boolean pinned, int from, int size) {
         Page<Compilation> compilations;
         Sort sort = Sort.by(Sort.Direction.ASC, "id");
         PageRequest page = PageRequest.of(from > 0 ? from / size : 0, size, sort);
@@ -87,7 +87,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public CompilationDto compilationById(long compId) {
+    public CompilationDto getCompilationById(long compId) {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException("Невозможно найти. Такой подборки нет."));
         return CompilationMapper.toDto(compilation);
