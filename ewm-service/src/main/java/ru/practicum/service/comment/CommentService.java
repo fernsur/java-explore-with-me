@@ -22,6 +22,6 @@ public interface CommentService {
     List<CommentDto> getAllCommentsAdmin(String text, LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                          int from, int size);
 
-    List<CommentDto>getCommentsByEventId(long eventId, LocalDateTime rangeStart, LocalDateTime rangeEnd,
+    List<CommentDto> getCommentsByEventId(long eventId, LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                          int from, int size);
 }

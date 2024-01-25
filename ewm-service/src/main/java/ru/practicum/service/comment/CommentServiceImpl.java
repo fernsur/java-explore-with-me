@@ -93,7 +93,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDto>getCommentsByEventId(long eventId, LocalDateTime rangeStart, LocalDateTime rangeEnd,
+    public List<CommentDto> getCommentsByEventId(long eventId, LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                          int from, int size) {
         return searchComments(null, eventId, rangeStart, rangeEnd, from, size);
     }
