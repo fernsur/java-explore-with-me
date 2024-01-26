@@ -42,15 +42,16 @@ public class PublicCommentController {
         return new ResponseEntity<>(service.getCommentById(commentId), HttpStatus.OK);
     }
 
-    @GetMapping()
+    @GetMapping("/events/{eventId}")
     public ResponseEntity<List<CommentDto>> getAllCommentsPublic(
+                                                            @Positive @PathVariable long eventId,
                                                             @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                             @RequestParam(required = false) LocalDateTime rangeStart,
                                                             @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                             @RequestParam(required = false) LocalDateTime rangeEnd,
                                                             @PositiveOrZero @RequestParam(defaultValue = "0") int from,
                                                             @Positive @RequestParam(defaultValue = "10") int size) {
-        log.info("Получен GET-запрос к эндпоинту /comments на получение списка комментариев.");
+        log.info("Получен GET-запрос к эндпоинту /comments/events/{eventId} на получение списка комментариев.");
 
         if (rangeStart != null && rangeEnd != null && rangeStart.isAfter(rangeEnd)) {
             throw new ValidationException("Дата начала сортировки не может быть позже даты конца.");
@@ -59,6 +60,7 @@ public class PublicCommentController {
         if (rangeStart == null) rangeStart = LocalDateTime.now();
         if (rangeEnd == null) rangeEnd = MAX_DATE;
 
-        return new ResponseEntity<>(service.getAllCommentsPublic(rangeStart, rangeEnd, from, size), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllCommentsPublic(eventId, rangeStart, rangeEnd, from, size),
+                HttpStatus.OK);
     }
 }

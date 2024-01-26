@@ -22,7 +22,7 @@ public class CommentMapper {
                 .created(comment.getCreated())
                 .updated(comment.getUpdated())
                 .commentator(UserMapper.toShortDto(comment.getCommentator()))
-                .event(EventMapper.toShortDto(comment.getEvent()))
+                .eventId(comment.getEvent().getId())
                 .build();
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.comment.NewCommentDto;
+import ru.practicum.dto.comment.UpdateCommentDto;
+import ru.practicum.enums.EventState;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.mapper.CommentMapper;
 import ru.practicum.model.Comment;
@@ -39,9 +41,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto createComment(NewCommentDto dto, long userId, long eventId) {
+    public CommentDto createComment(NewCommentDto dto, long userId) {
         User user = findUserById(userId);
-        Event event = findEventById(eventId);
+        Event event = findEventById(dto.getEventId());
         Comment comment = CommentMapper.toEntity(dto, user, event);
         LocalDateTime time = LocalDateTime.now();
 
@@ -52,9 +54,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto updateComment(NewCommentDto dto, long userId, long commentId) {
+    public CommentDto updateComment(UpdateCommentDto dto, long userId) {
         findUserById(userId);
-        Comment comment = findCommentById(commentId);
+        Comment comment = findCommentById(dto.getId());
 
         comment.setText(dto.getText());
         comment.setUpdated(LocalDateTime.now());
@@ -64,8 +66,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteCommentPrivate(long userId, long commentId) {
-        findUserById(userId);
-        findCommentById(commentId);
+        findCommentByIdAndUserId(commentId, userId);
         commentRepository.deleteById(commentId);
     }
 
@@ -81,9 +82,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentDto> getAllCommentsPublic(LocalDateTime rangeStart, LocalDateTime rangeEnd,
+    public List<CommentDto> getAllCommentsPublic(long eventId, LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                                  int from, int size) {
-        return searchComments(null, null, rangeStart, rangeEnd, from, size);
+        findEventById(eventId);
+        return searchComments(null, eventId, rangeStart, rangeEnd, from, size);
     }
 
     @Override
@@ -95,6 +97,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDto> getCommentsByEventId(long eventId, LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                          int from, int size) {
+        findEventById(eventId);
         return searchComments(null, eventId, rangeStart, rangeEnd, from, size);
     }
 
@@ -117,12 +120,17 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private Event findEventById(long eventId) {
-        return eventRepository.findById(eventId)
+        return eventRepository.findByIdAndState(eventId, EventState.PUBLISHED)
                 .orElseThrow(() -> new NotFoundException("Невозможно найти. Такого события нет."));
     }
 
     private Comment findCommentById(long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("Невозможно найти. Такого комментария нет."));
+    }
+
+    private void findCommentByIdAndUserId(long commentId, long userId) {
+        commentRepository.findByIdAndCommentatorId(commentId, userId)
+                .orElseThrow(() -> new NotFoundException("Невозможно удалить. Такого комментария нет."));
     }
 }

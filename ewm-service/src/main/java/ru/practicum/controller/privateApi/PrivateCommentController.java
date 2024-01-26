@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.comment.NewCommentDto;
+import ru.practicum.dto.comment.UpdateCommentDto;
 import ru.practicum.exception.ValidationException;
 import ru.practicum.service.comment.CommentService;
 
@@ -42,21 +43,18 @@ public class PrivateCommentController {
         this.service = service;
     }
 
-    @PostMapping("/events/{eventId}")
+    @PostMapping()
     public ResponseEntity<CommentDto> createComment(@RequestBody @Valid NewCommentDto dto,
-                                                    @Positive @PathVariable long userId,
-                                                    @Positive @PathVariable long eventId) {
-        log.info("Получен POST-запрос к эндпоинту /users/{userId}/comments/events/{eventId} " +
-                "на добавление комментария.");
-        return new ResponseEntity<>(service.createComment(dto, userId, eventId), HttpStatus.CREATED);
+                                                    @Positive @PathVariable long userId) {
+        log.info("Получен POST-запрос к эндпоинту /users/{userId}/comments на добавление комментария.");
+        return new ResponseEntity<>(service.createComment(dto, userId), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{commentId}")
-    public ResponseEntity<CommentDto> updateComment(@RequestBody @Valid NewCommentDto dto,
-                                                    @Positive @PathVariable long userId,
-                                                    @Positive @PathVariable long commentId) {
-        log.info("Получен PATCH-запрос к эндпоинту /users/{userId}/comments/{commentId} на обновление комментария.");
-        return new ResponseEntity<>(service.updateComment(dto, userId, commentId), HttpStatus.OK);
+    @PatchMapping()
+    public ResponseEntity<CommentDto> updateComment(@RequestBody @Valid UpdateCommentDto dto,
+                                                    @Positive @PathVariable long userId) {
+        log.info("Получен PATCH-запрос к эндпоинту /users/{userId}/comments на обновление комментария.");
+        return new ResponseEntity<>(service.updateComment(dto, userId), HttpStatus.OK);
     }
 
     @DeleteMapping("/{commentId}")

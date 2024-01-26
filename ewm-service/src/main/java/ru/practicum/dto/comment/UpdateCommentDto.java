@@ -11,9 +11,9 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewCommentDto {
+public class UpdateCommentDto {
     @Positive
-    private long eventId;
+    private long id;
 
     @NotBlank(message = "Описание события не может быть пустым")
     @Size(min = 20, max = 7000)

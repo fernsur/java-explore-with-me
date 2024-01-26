@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1cd2c8c7-b44e-4918-8c04-20528f94be6d",
+		"_postman_id": "bfc86923-e91c-4989-9102-f085cd80630e",
 		"name": "feature",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "28242083"
@@ -48,16 +48,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/1/comments/events/1",
+							"raw": "{{baseUrl}}/users/1/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
 								"1",
-								"comments",
-								"events",
-								"1"
+								"comments"
 							]
 						}
 					},
@@ -102,16 +100,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/1/comments/events/1",
+							"raw": "{{baseUrl}}/users/1/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
 								"1",
-								"comments",
-								"events",
-								"1"
+								"comments"
 							]
 						}
 					},
@@ -156,16 +152,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/1/comments/events/1",
+							"raw": "{{baseUrl}}/users/1/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
 								"1",
-								"comments",
-								"events",
-								"1"
+								"comments"
 							]
 						}
 					},
@@ -201,15 +195,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/1/comments/1",
+							"raw": "{{baseUrl}}/users/1/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
 								"1",
-								"comments",
-								"1"
+								"comments"
 							]
 						}
 					},
@@ -245,15 +238,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/1/comments/1",
+							"raw": "{{baseUrl}}/users/1/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
 								"1",
-								"comments",
-								"1"
+								"comments"
 							]
 						}
 					},
@@ -289,15 +281,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/1/comments/1",
+							"raw": "{{baseUrl}}/users/1/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
 								"1",
-								"comments",
-								"1"
+								"comments"
 							]
 						}
 					},
@@ -376,8 +367,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {",
-									"    pm.response.to.be.badRequest;    ",
+									"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {",
+									"    pm.response.to.be.notFound;    ",
 									"    pm.response.to.be.withBody;",
 									"    pm.response.to.be.json;",
 									"});"
@@ -389,16 +380,24 @@
 					"request": {
 						"method": "PATCH",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 999999,\n    \"text\": \"Очень обновленный комментарий\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{baseUrl}}/users/1/comments/999",
+							"raw": "{{baseUrl}}/users/1/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
 								"1",
-								"comments",
-								"999"
+								"comments"
 							]
 						}
 					},
@@ -425,12 +424,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/comments?rangeStart=2023-01-06%2013%3A30%3A38&rangeEnd=2022-01-06%2013%3A30%3A38",
+							"raw": "{{baseUrl}}/comments/events/1?rangeStart=2023-01-06%2013%3A30%3A38&rangeEnd=2022-01-06%2013%3A30%3A38",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"comments"
+								"comments",
+								"events",
+								"1"
 							],
 							"query": [
 								{
@@ -579,8 +580,9 @@
 									"    try {",
 									"        const user = await api.addUser(rnd.getUser());",
 									"        const category = await api.addCategory(rnd.getCategory());",
-									"        const event = await api.addEvent(user.id, rnd.getEvent(category.id));",
-									"",
+									"        let eventBody = rnd.getEvent(category.id);",
+									"        let event = await api.addEvent(user.id, eventBody);",
+									"        event = await api.publishEvent(event.id);",
 									"        pm.collectionVariables.set(\"uid\", user.id)",
 									"        pm.collectionVariables.set(\"eid\", event.id)",
 									"    } catch(err) {",
@@ -619,13 +621,13 @@
 									"const source = JSON.parse(pm.request.body.raw);",
 									"const target = pm.response.json();",
 									"",
-									"pm.test(\"Комментарий должен содержать поля: id, text, created, updated, commentator, event\", function () {",
+									"pm.test(\"Комментарий должен содержать поля: id, text, created, updated, commentator, eventId\", function () {",
 									"pm.expect(target).to.have.property('id');",
 									"pm.expect(target).to.have.property('text');",
 									"pm.expect(target).to.have.property('created');",
 									"pm.expect(target).to.have.property('updated');",
 									"pm.expect(target).to.have.property('commentator');",
-									"pm.expect(target).to.have.property('event');",
+									"pm.expect(target).to.have.property('eventId');",
 									"});",
 									"",
 									"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {",
@@ -642,7 +644,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"text\": \"Предположительно очень длинный текст комментария.\"\n}",
+							"raw": "{\n    \"eventId\": {{eid}},\n    \"text\": \"Предположительно очень длинный текст комментария.\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -650,25 +652,19 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/:userId/comments/events/:eventId",
+							"raw": "{{baseUrl}}/users/:userId/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
 								":userId",
-								"comments",
-								"events",
-								":eventId"
+								"comments"
 							],
 							"variable": [
 								{
 									"key": "userId",
 									"value": "{{uid}}"
-								},
-								{
-									"key": "eventId",
-									"value": "{{eid}}"
 								}
 							]
 						}
@@ -691,13 +687,13 @@
 									"const source = JSON.parse(pm.request.body.raw);",
 									"const target = pm.response.json();",
 									"",
-									"pm.test(\"Комментарий должен содержать поля: id, text, created, updated, commentator, event\", function () {",
+									"pm.test(\"Комментарий должен содержать поля: id, text, created, updated, commentator, eventId\", function () {",
 									"pm.expect(target).to.have.property('id');",
 									"pm.expect(target).to.have.property('text');",
 									"pm.expect(target).to.have.property('created');",
 									"pm.expect(target).to.have.property('updated');",
 									"pm.expect(target).to.have.property('commentator');",
-									"pm.expect(target).to.have.property('event');",
+									"pm.expect(target).to.have.property('eventId');",
 									"});",
 									"",
 									"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {",
@@ -719,8 +715,10 @@
 									"    try {",
 									"        const user = await api.addUser(rnd.getUser());",
 									"        const category = await api.addCategory(rnd.getCategory());",
-									"        const event = await api.addEvent(user.id, rnd.getEvent(category.id));",
-									"        const comment = await api.addComment(user.id, event.id, rnd.getComment());",
+									"        let eventBody = rnd.getEvent(category.id);",
+									"        let event = await api.addEvent(user.id, eventBody);",
+									"        event = await api.publishEvent(event.id);",
+									"        const comment = await api.addComment(user.id, rnd.getComment(event.id));",
 									"        pm.collectionVariables.set(\"uid\", user.id)",
 									"        pm.collectionVariables.set(\"eid\", event.id)",
 									"        pm.collectionVariables.set(\"cid\", comment.id)",
@@ -753,7 +751,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"text\": \"Очень обновленный комментарий\"\n}",
+							"raw": "{\n    \"id\": {{cid}},\n    \"text\": \"Очень обновленный комментарий\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -761,24 +759,19 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/:userId/comments/:commentId",
+							"raw": "{{baseUrl}}/users/:userId/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
 								":userId",
-								"comments",
-								":commentId"
+								"comments"
 							],
 							"variable": [
 								{
 									"key": "userId",
 									"value": "{{uid}}"
-								},
-								{
-									"key": "commentId",
-									"value": "{{cid}}"
 								}
 							]
 						}
@@ -801,13 +794,13 @@
 									"const source = pm.collectionVariables.get('response');",
 									"const target = pm.response.json();",
 									"",
-									"pm.test(\"Комментарий должен содержать поля: id, text, created, updated, commentator, event\", function () {",
+									"pm.test(\"Комментарий должен содержать поля: id, text, created, updated, commentator, eventId\", function () {",
 									"pm.expect(target).to.have.property('id');",
 									"pm.expect(target).to.have.property('text');",
 									"pm.expect(target).to.have.property('created');",
 									"pm.expect(target).to.have.property('updated');",
 									"pm.expect(target).to.have.property('commentator');",
-									"pm.expect(target).to.have.property('event');",
+									"pm.expect(target).to.have.property('eventId');",
 									"});",
 									"",
 									"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {",
@@ -829,8 +822,10 @@
 									"    try {",
 									"        const user = await api.addUser(rnd.getUser());",
 									"        const category = await api.addCategory(rnd.getCategory());",
-									"        const event = await api.addEvent(user.id, rnd.getEvent(category.id));",
-									"        const comment = await api.addComment(user.id, event.id, rnd.getComment());",
+									"        let eventBody = rnd.getEvent(category.id);",
+									"        let event = await api.addEvent(user.id, eventBody);",
+									"        event = await api.publishEvent(event.id);",
+									"        const comment = await api.addComment(user.id, rnd.getComment(event.id));",
 									"        pm.collectionVariables.set(\"uid\", user.id)",
 									"        pm.collectionVariables.set(\"eid\", event.id)",
 									"        pm.collectionVariables.set(\"cid\", comment.id)",
@@ -905,8 +900,10 @@
 									"    try {",
 									"        const user = await api.addUser(rnd.getUser());",
 									"        const category = await api.addCategory(rnd.getCategory());",
-									"        const event = await api.addEvent(user.id, rnd.getEvent(category.id));",
-									"        const comment = await api.addComment(user.id, event.id, rnd.getComment());",
+									"        let eventBody = rnd.getEvent(category.id);",
+									"        let event = await api.addEvent(user.id, eventBody);",
+									"        event = await api.publishEvent(event.id);",
+									"        const comment = await api.addComment(user.id, rnd.getComment(event.id));",
 									"        pm.collectionVariables.set(\"uid\", user.id)",
 									"        pm.collectionVariables.set(\"eid\", event.id)",
 									"        pm.collectionVariables.set(\"cid\", comment.id)",
@@ -976,11 +973,11 @@
 									"    try {",
 									"        const user = await api.addUser(rnd.getUser());",
 									"        const category = await api.addCategory(rnd.getCategory());",
-									"        const event = await api.addEvent(user.id, rnd.getEvent(category.id));",
-									"        const comment = await api.addComment(user.id, event.id, rnd.getComment());",
+									"        let eventBody = rnd.getEvent(category.id);",
+									"        let event = await api.addEvent(user.id, eventBody);",
+									"        event = await api.publishEvent(event.id);",
 									"        pm.collectionVariables.set(\"uid\", user.id)",
 									"        pm.collectionVariables.set(\"eid\", event.id)",
-									"        pm.collectionVariables.set(\"cid\", comment.id)",
 									"    } catch(err) {",
 									"        console.error(\"Ошибка при подготовке тестовых данных.\", err);",
 									"    }",
@@ -1017,13 +1014,13 @@
 									"const source = JSON.parse(pm.request.body.raw);",
 									"const target = pm.response.json();",
 									"",
-									"pm.test(\"Комментарий должен содержать поля: id, text, created, updated, commentator, event\", function () {",
+									"pm.test(\"Комментарий должен содержать поля: id, text, created, updated, commentator, eventId\", function () {",
 									"pm.expect(target).to.have.property('id');",
 									"pm.expect(target).to.have.property('text');",
 									"pm.expect(target).to.have.property('created');",
 									"pm.expect(target).to.have.property('updated');",
 									"pm.expect(target).to.have.property('commentator');",
-									"pm.expect(target).to.have.property('event');",
+									"pm.expect(target).to.have.property('eventId');",
 									"});",
 									"",
 									"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {",
@@ -1040,7 +1037,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"text\": \"Еще один длинный ком\"\n}",
+							"raw": "{\n    \"eventId\": {{eid}},\n    \"text\": \"Еще один длинный ком\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1048,25 +1045,19 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/:userId/comments/events/:eventId",
+							"raw": "{{baseUrl}}/users/:userId/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
 								":userId",
-								"comments",
-								"events",
-								":eventId"
+								"comments"
 							],
 							"variable": [
 								{
 									"key": "userId",
 									"value": "{{uid}}"
-								},
-								{
-									"key": "eventId",
-									"value": "{{eid}}"
 								}
 							]
 						}
@@ -1107,8 +1098,10 @@
 									"    try {",
 									"        const user = await api.addUser(rnd.getUser());",
 									"        const category = await api.addCategory(rnd.getCategory());",
-									"        const event = await api.addEvent(user.id, rnd.getEvent(category.id));",
-									"        const comment = await api.addComment(user.id, event.id, rnd.getComment());",
+									"        let eventBody = rnd.getEvent(category.id);",
+									"        let event = await api.addEvent(user.id, eventBody);",
+									"        event = await api.publishEvent(event.id);",
+									"        const comment = await api.addComment(user.id, rnd.getComment(event.id));",
 									"        pm.collectionVariables.set(\"uid\", user.id)",
 									"        pm.collectionVariables.set(\"eid\", event.id)",
 									"        pm.collectionVariables.set(\"cid\", comment.id)",
@@ -1196,8 +1189,10 @@
 									"    try {",
 									"        const user = await api.addUser(rnd.getUser());",
 									"        const category = await api.addCategory(rnd.getCategory());",
-									"        const event = await api.addEvent(user.id, rnd.getEvent(category.id));",
-									"        const comment = await api.addComment(user.id, event.id, rnd.getComment());",
+									"        let eventBody = rnd.getEvent(category.id);",
+									"        let event = await api.addEvent(user.id, eventBody);",
+									"        event = await api.publishEvent(event.id);",
+									"        const comment = await api.addComment(user.id, rnd.getComment(event.id));",
 									"        pm.collectionVariables.set(\"uid\", user.id)",
 									"        pm.collectionVariables.set(\"eid\", event.id)",
 									"        pm.collectionVariables.set(\"cid\", comment.id)",
@@ -1229,17 +1224,25 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/comments?rangeStart=2022-01-06%2013%3A30%3A38",
+							"raw": "{{baseUrl}}/comments/events/:eventId?rangeStart=2022-01-06%2013%3A30%3A38",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"comments"
+								"comments",
+								"events",
+								":eventId"
 							],
 							"query": [
 								{
 									"key": "rangeStart",
 									"value": "2022-01-06%2013%3A30%3A38"
+								}
+							],
+							"variable": [
+								{
+									"key": "eventId",
+									"value": "{{eid}}"
 								}
 							]
 						}
@@ -1271,8 +1274,10 @@
 									"    try {",
 									"        const user = await api.addUser(rnd.getUser());",
 									"        const category = await api.addCategory(rnd.getCategory());",
-									"        const event = await api.addEvent(user.id, rnd.getEvent(category.id));",
-									"        const comment = await api.addComment(user.id, event.id, rnd.getComment());",
+									"        let eventBody = rnd.getEvent(category.id);",
+									"        let event = await api.addEvent(user.id, eventBody);",
+									"        event = await api.publishEvent(event.id);",
+									"        const comment = await api.addComment(user.id, rnd.getComment(event.id));",
 									"        pm.collectionVariables.set(\"uid\", user.id)",
 									"        pm.collectionVariables.set(\"eid\", event.id)",
 									"        pm.collectionVariables.set(\"cid\", comment.id)",
@@ -1337,8 +1342,10 @@
 									"    try {",
 									"        const user = await api.addUser(rnd.getUser());",
 									"        const category = await api.addCategory(rnd.getCategory());",
-									"        const event = await api.addEvent(user.id, rnd.getEvent(category.id));",
-									"        const comment = await api.addComment(user.id, event.id, rnd.getComment());",
+									"        let eventBody = rnd.getEvent(category.id);",
+									"        let event = await api.addEvent(user.id, eventBody);",
+									"        event = await api.publishEvent(event.id);",
+									"        const comment = await api.addComment(user.id, rnd.getComment(event.id));",
 									"        pm.collectionVariables.set(\"uid\", user.id)",
 									"        pm.collectionVariables.set(\"eid\", event.id)",
 									"        pm.collectionVariables.set(\"cid\", comment.id)",
@@ -1481,12 +1488,20 @@
 					"        return this.post(\"/users/\" + userId + \"/events\", event, \"Ошибка при добавлении нового события: \", verbose);",
 					"    }",
 					"",
-					"    async addComment(userId, eventId, comment, verbose=null) {",
-					"        return this.post(\"/users/\" + userId + \"/comments/events/\" + eventId, comment, \"Ошибка при добавлении нового комментария: \", verbose);",
+					"    async addComment(userId, comment, verbose=null) {",
+					"        return this.post(\"/users/\" + userId + \"/comments\", comment, \"Ошибка при добавлении нового комментария: \", verbose);",
+					"    }",
+					"",
+					"    async publishEvent(eventId, verbose=null) {",
+					"        return this.patch('/admin/events/' + eventId, {stateAction: \"PUBLISH_EVENT\"}, \"Ошибка при публикации события\", verbose);",
 					"    }",
 					"",
 					"    async post(path, body, errorText = \"Ошибка при выполнении post-запроса: \", verbose=null) {",
 					"        return this.sendRequest(\"POST\", path, body, errorText, verbose);",
+					"    }",
+					"",
+					"    async patch(path, body = null, errorText = \"Ошибка при выполнении patch-запроса: \", verbose=null) {",
+					"        return this.sendRequest(\"PATCH\", path, body, errorText, verbose);",
 					"    }",
 					"",
 					"    async sendRequest(method, path, body=null, errorText = \"Ошибка при выполнении запроса: \", verbose=null) {",
@@ -1564,8 +1579,9 @@
 					"        }",
 					"    }",
 					"",
-					"    getComment() {",
+					"    getComment(eventId) {",
 					"        return {",
+					"            eventId: eventId,",
 					"            text: pm.variables.replaceIn('{{$randomLoremParagraph}}')",
 					"        };",
 					"    }",

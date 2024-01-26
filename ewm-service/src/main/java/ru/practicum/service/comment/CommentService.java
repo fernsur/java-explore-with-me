@@ -2,14 +2,15 @@ package ru.practicum.service.comment;
 
 import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.comment.NewCommentDto;
+import ru.practicum.dto.comment.UpdateCommentDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CommentService {
-    CommentDto createComment(NewCommentDto dto, long userId, long eventId);
+    CommentDto createComment(NewCommentDto dto, long userId);
 
-    CommentDto updateComment(NewCommentDto dto, long userId, long commentId);
+    CommentDto updateComment(UpdateCommentDto dto, long userId);
 
     void deleteCommentPrivate(long userId, long commentId);
 
@@ -17,7 +18,8 @@ public interface CommentService {
 
     CommentDto getCommentById(long commentId);
 
-    List<CommentDto> getAllCommentsPublic(LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size);
+    List<CommentDto> getAllCommentsPublic(long eventId, LocalDateTime rangeStart, LocalDateTime rangeEnd,
+                                          int from, int size);
 
     List<CommentDto> getAllCommentsAdmin(String text, LocalDateTime rangeStart, LocalDateTime rangeEnd,
                                          int from, int size);

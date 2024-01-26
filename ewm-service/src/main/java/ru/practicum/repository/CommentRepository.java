@@ -9,8 +9,11 @@ import org.springframework.data.repository.query.Param;
 import ru.practicum.model.Comment;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
+    Optional<Comment> findByIdAndCommentatorId(long commentId, long commentatorId);
+
     @Query("SELECT c FROM Comment c " +
             "WHERE (:text IS NULL OR LOWER(c.text) LIKE LOWER(CONCAT('%', :text, '%'))) " +
             "AND (:event IS NULL OR c.event.id = :event) " +

@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.user.UserShortDto;
 
 import java.time.LocalDateTime;
@@ -28,5 +27,5 @@ public class CommentDto {
 
     private UserShortDto commentator;
 
-    private EventShortDto event;
+    private long eventId;
 }
